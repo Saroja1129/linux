@@ -1,4 +1,4 @@
-# Assignment 1 - Rushil Shah
+# Assignment 1 - Rushil Shah - 015908789
 
 1. Start you VMWare workstation
     - You can download the workstation player [here](https://www.vmware.com/products/workstation-player/workstation-player-evaluation.html)
@@ -35,5 +35,5 @@
 26. The earlier step won't give any output in console. To view the output run ```dmesg```
 27. The console will have lot of lines displayed from which Pinbased Controls MSR value is the answer of the assignment. If at all it shows 9, it implies that the nested virtualization hasn't been enabled and you may have to start fresh.
 28. To remove the kernel object simple run ``` sudo rmmod cmpe283-1.ko```
-29. If you want to make any chanages to the kernel module, you can simply remove it, make the changes, make the module and simply re-install it instead of rebooting the system.
-30. This marks the complettion of assignment, rest other part was to commit the Makefile and cmpe283-1.c to git.
+29. If you want to make any changes to the kernel module, you can simply remove it, make the changes, make the module and simply re-install it instead of rebooting the system.
+30. This marks the completion of assignment, rest other part was to commit the Makefile and cmpe283-1.c to git.
