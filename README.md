@@ -37,5 +37,41 @@ Student Id: 015944903.
 32. To remove the kernel object simple run sudo rmmod cmpe283-1.ko
 33. If you want to make any changes to the kernel module, you can simply remove it, make the changes, make the module and simply re-install it instead of rebooting the system.
 
+# Assignment-2
+
+The assignment files are committed to path linux/cmpe283/Assignment -2/
+1. Worked on the CPUID leaf node %eax=0x4FFFFFFF and %eax=0x4FFFFFFE
+2. To get the total number of exits modified the code in cpuid.c file.
+3. Install the nested virtual machine inside the virtual machine
+4. Now execute %eax=0x4FFFFFFF in the eax and this will return the total number of exits.
+
+
+Below are the commands executed:
+1. Modified the code in cpuid.c and vmx file.
+2. make modules
+3. make -j 4 modules
+4. sudo bash
+5. sudo make INSTALL_MOD_STRIP=1 modules_install && make install
+6. lsmod | grep kvm
+7. sudo rmmod kvm_intel
+8. sudo rmmod kvm
+9. modprobe kvm
+10. modprobe kvm_intel
+
+Creating a Inner VM inside a VM using the below commands:
+1. sudo apt update
+2. sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+3. sudo systemct1 status libvirtd
+4. sudo systemct1 enable --now libvirtd
+5. sudo apt install virt-manager
+6. sudo virt-manager
+7. Install ubuntu 20.4 iso image
+8. Installing CPUID package
+9. Download the CPUID deb package for AMD64 https://packages.ubuntu.com/bionic/admin/cpuid
+10. Installed the package and execute install using sudo dpkg -i cpuid_20170122-1.deb
+11. Executed the below command inside VM
+        cpuid -l 0X4ffffffd -s exit_number
+        cpuid -l 0X4ffffffc -s exit_number
+
 
 
