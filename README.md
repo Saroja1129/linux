@@ -70,8 +70,8 @@ For this assignment 0x4FFFFFFF and 0x4FFFFFFE ( 1st and 2nd) CPU Leaf nodes are 
 16. To start the virtual manager, run ```virt-manager```. This will boot where in you will have to use .iso file to install ubuntu
 17. Post installation, open the terminal and run ```sudo apt-get update``` and install cpuid by ``` sudo apt-get install -y cpuid```
 18. cpuid package is installed to test our implementation in the module, this lets us directly run by giving the input and see the output
-19. Run ``` cpuid(0x4FFFFFFF)``` and ``` cpuid(0x4FFFFFFE) and this will run the functions
-20. Go back the existing VM and run ``` dmesg ``` to get the output
+19. Run ``` cpuid(0x4FFFFFFF)``` and ``` cpuid(0x4FFFFFFE)``` and this will run the functions
+20. Go back the existing VM and run ``` dmesg ``` to get the output.
 
 PS: During running ```make INSTALL_MOD_STRIP=1 modules_install``` I came across cycle detection error
 
