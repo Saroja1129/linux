@@ -1442,13 +1442,25 @@ EXPORT_SYMBOL_GPL(kvm_cpuid);
 int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 {
 	u32 eax, ebx, ecx, edx;
-
+	extern u32 total_exit_count;
+	extern u64 time_elapsed;
 	if (cpuid_fault_enabled(vcpu) && !kvm_require_cpl(vcpu, 0))
 		return 1;
 
 	eax = kvm_rax_read(vcpu);
 	ecx = kvm_rcx_read(vcpu);
-	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
+	if(eax == 0x4FFFFFFF){ //Assignment 2:1
+		eax = total_exit_count; //storing total_exits to eax
+		printk(KERN_INFO "For Input 0x4FFFFFFF, total exits are %u", total_exit_counts);
+	}
+	else if(eax == 0x4FFFFFFE){ //Assignment 2:2
+		ebx = (unsigned long) time_elapsed >> 32;//storing the higher 32 bits
+		ecx = (unsigned long) time_elapsed & 0xffffffff;//storing the lower 32 bits	
+		printk(KERN_INFO "For Input 0x4FFFFFFE, total time elapsed is %llu", time_elapsed); 
+	}
+	else{
+		kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
+	}
 	kvm_rax_write(vcpu, eax);
 	kvm_rbx_write(vcpu, ebx);
 	kvm_rcx_write(vcpu, ecx);

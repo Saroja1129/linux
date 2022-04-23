@@ -6005,12 +6005,38 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
  * The guest has exited.  See if we can fix it or if we need userspace
  * assistance.
  */
+
+//Declaring global variable for total number of exits
+u32 total_exit_count = 0;
+EXPORT_SYMBOL(total_exit_count); //Exporting so it can be used by cpuid.c
+
+u34 time_elapsed; //This will store total time elapsed for various exits
+EXPORT_SYMBOL(time_elapsed); //Exporting so it can be used by other modules
+
+//This function returns the current CPU cycles for which the time stamp is incremented by every CPU tick. 
+//This code is referenced from the website www.mcs.anl.gov/~kazutomo/rdtsc.html
+static __inline__ unsigned long long get_current_time_stamp(void){
+	unsigned hi, lo;
+	__asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
+	return ((unsigned long long) lo) | (((unsigned long long) hi) << 32);
+}
+
+//All the exits are handled in this function so main logic and time calculation resides in this function
 static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 {
+	u64 end_time = 0; //This will store the end of each exit
+	u64 start_time = get_current_time_stamp(); //to capture Start of the exit
 	struct vcpu_vmx *vmx = to_vmx(vcpu);
 	union vmx_exit_reason exit_reason = vmx->exit_reason;
 	u32 vectoring_info = vmx->idt_vectoring_info;
 	u16 exit_handler_index;
+	total_exit_count++; //Incrementing the exit counter to be used in cpuid.c
+	
+	/* To calculate time elapsed by each exit, we note the time of the function
+	   and on before returning from the function for various exits below the code, we
+	   again capture the time. The difference of start time and this time will be
+	   the elapsed for that particulat exit
+	*/  
 
 	/*
 	 * Flush logged GPAs PML buffer, this will make dirty_bitmap more
@@ -6029,9 +6055,18 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	 * invalid guest state should never happen as that means KVM knowingly
 	 * allowed a nested VM-Enter with an invalid vmcs12.  More below.
 	 */
-	if (KVM_BUG_ON(vmx->nested.nested_run_pending, vcpu->kvm))
+	if (KVM_BUG_ON(vmx->nested.nested_run_pending, vcpu->kvm)){
+		/*Before returning we note the time stamp and calucalte the difference
+		 between this time and start time to get time taken by this exit
+		*/
+
+		//The same code snippet below is repeated several time in this function for various exits 
+		end_time = get_current_time_stamp();
+		
+		time_elapsed += end_time - start_time;
 		return -EIO;
 
+	}
 	if (is_guest_mode(vcpu)) {
 		/*
 		 * PML is never enabled when running L2, bail immediately if a
@@ -6039,6 +6074,11 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		 */
 		if (exit_reason.basic == EXIT_REASON_PML_FULL)
 			goto unexpected_vmexit;
+
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
+
 
 		/*
 		 * The host physical addresses of some pages of guest memory
@@ -6074,8 +6114,16 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	}
 
 	/* If guest state is invalid, start emulating.  L2 is handled above. */
-	if (vmx->emulation_required)
+	if (vmx->emulation_required){
+	
+		//Calculating time diff
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
 		return handle_invalid_guest_state(vcpu);
+		
+	}
+
 
 	if (exit_reason.failed_vmentry) {
 		dump_vmcs(vcpu);
@@ -6083,6 +6131,12 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		vcpu->run->fail_entry.hardware_entry_failure_reason
 			= exit_reason.full;
 		vcpu->run->fail_entry.cpu = vcpu->arch.last_vmentry_cpu;
+
+		//Calculating time difference
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
+
 		return 0;
 	}
 
@@ -6149,24 +6203,66 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	if (exit_reason.basic >= kvm_vmx_max_exit_handlers)
 		goto unexpected_vmexit;
 #ifdef CONFIG_RETPOLINE
-	if (exit_reason.basic == EXIT_REASON_MSR_WRITE)
+	if (exit_reason.basic == EXIT_REASON_MSR_WRITE){
+		//Calculating Time difference
+	
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
 		return kvm_emulate_wrmsr(vcpu);
-	else if (exit_reason.basic == EXIT_REASON_PREEMPTION_TIMER)
+	}
+	else if (exit_reason.basic == EXIT_REASON_PREEMPTION_TIMER){
+		//Calculating Time difference
+		
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
 		return handle_preemption_timer(vcpu);
-	else if (exit_reason.basic == EXIT_REASON_INTERRUPT_WINDOW)
+	}
+	else if (exit_reason.basic == EXIT_REASON_INTERRUPT_WINDOW){
+		//Calculating Time difference
+		
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
 		return handle_interrupt_window(vcpu);
-	else if (exit_reason.basic == EXIT_REASON_EXTERNAL_INTERRUPT)
+	}
+	else if (exit_reason.basic == EXIT_REASON_EXTERNAL_INTERRUPT){
+		//Calculating Time difference
+
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
 		return handle_external_interrupt(vcpu);
-	else if (exit_reason.basic == EXIT_REASON_HLT)
+	}
+	else if (exit_reason.basic == EXIT_REASON_HLT){
+		//Calculating Time difference
+
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
 		return kvm_emulate_halt(vcpu);
-	else if (exit_reason.basic == EXIT_REASON_EPT_MISCONFIG)
+	}
+	else if (exit_reason.basic == EXIT_REASON_EPT_MISCONFIG){
+		//Calculating Time difference
+
+		end_time = get_current_time_stamp();
+                
+                time_elapsed += end_time - start_time;
 		return handle_ept_misconfig(vcpu);
+	}
 #endif
 
 	exit_handler_index = array_index_nospec((u16)exit_reason.basic,
 						kvm_vmx_max_exit_handlers);
 	if (!kvm_vmx_exit_handlers[exit_handler_index])
 		goto unexpected_vmexit;
+
+	//Calculating Time difference	
+
+	end_time = get_current_time_stamp();
+        
+        time_elapsed += end_time - start_time;
 
 	return kvm_vmx_exit_handlers[exit_handler_index](vcpu);
 
