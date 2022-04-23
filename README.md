@@ -37,3 +37,30 @@
 28. To remove the kernel object simple run ``` sudo rmmod cmpe283-1.ko```
 29. If you want to make any changes to the kernel module, you can simply remove it, make the changes, make the module and simply re-install it instead of rebooting the system.
 30. This marks the completion of assignment, rest other part was to commit the Makefile and cmpe283-1.c to git.
+
+
+# Assignment 2 - Rushil Shah - 015908789
+
+For this assignment 0x4FFFFFFF and 0x4FFFFFFE ( 1st and 2nd) CPU Leaf nodes are implemented
+1. Go to forked linux directory from the previous assignment
+2. run ```cd linux/arch/x86/kvm``` 
+3. Include the code for the implementation in cpuid.c and vmx/vmx.c.
+4. Once the code is added, run ``` make -j 4 modules```
+5. Once that is done run ``` sudo make INSTALL_MOD_STRIP=1 modules_install
+6. run ```sudo make install```
+7. Now check if kvm is not loaded in the hypervisor for some reason, to do that run ```lsmod | grep kvm```
+8. If you find kvm and kvm_intell like the image below run ``` sudo rmmod kvm_intel ``` and ``` sudo rmmod kvm``` to remove the modules
+9. Once removed, check again and if there is no output you can again load the updated module.
+10. To load the updated module, run ``` sudo modprobe kvm ``` and ``` sudo modprobe kvm_intel```
+11. Now to verify if our code runs correctly Ubuntu VM instance inside the current VM is needed, which can be done by installing the Virtual Manager
+12. run ``` sudo apt update ```
+13. run ```sudo sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager```
+14. run ```sudo systemctl is-active libvirtd ```. This will check if the daemon is active or not
+15. To start the virtual manager, run ```virt-manager```. This will boot where in you will have to use .iso file to install ubuntu
+16. Post installation, open the terminal and run ```sudo apt-get update``` and install cpuid by ``` sudo apt-get install -y cpuid```
+17. cpuid package is installed to test our implementation in the module, this lets us directly run by giving the input and see the output
+18. Run ``` cpuid(0x4FFFFFFF)``` and ``` cpuid(0x4FFFFFFE) and this will run the functions
+19. Go back the existing VM and run ``` dmesg ``` to get the output
+
+PS: During running ```make INSTALL_MOD_STRIP=1 modules_install``` I came across cycle detection error
+
