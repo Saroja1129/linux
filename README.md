@@ -38,15 +38,15 @@ Student Id: 015944903.
 33. If you want to make any changes to the kernel module, you can simply remove it, make the changes, make the module and simply re-install it instead of rebooting the system.
 
 # Assignment-2
+## Instrumentation via Hypercall
 
-The assignment files are committed to path linux/cmpe283/Assignment -2/
-1. Worked on the CPUID leaf node %eax=0x4FFFFFFF and %eax=0x4FFFFFFE
-2. To get the total number of exits modified the code in cpuid.c file.
-3. Install the nested virtual machine inside the virtual machine
-4. Now execute %eax=0x4FFFFFFF in the eax and this will return the total number of exits.
+1. In this assignment we will work on CPUID leaf nodes %eax=0x4FFFFFFF and %eax=0x4FFFFFFE
+2. We return the total number of exits modified the code in cpuid.c file.
+3. So, first we will Install the nested virtual machine inside the virtual machine
+4. Now execute we will execute %eax=0x4FFFFFFF and %eax=0x4FFFFFFE in the eax and this will return the total number of exits.
 
 
-Below are the commands executed:
+The commands to execute are given below:
 1. Modified the code in cpuid.c and vmx file.
 2. make modules
 3. make -j 4 modules
@@ -58,7 +58,7 @@ Below are the commands executed:
 9. modprobe kvm
 10. modprobe kvm_intel
 
-Creating a Inner VM inside a VM using the below commands:
+Next we will Create a Inner VM inside a VM using the below commands:
 1. sudo apt update
 2. sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
 3. sudo systemct1 status libvirtd
@@ -73,5 +73,5 @@ Creating a Inner VM inside a VM using the below commands:
         cpuid -l 0X4fffffff -s exit_number
         cpuid -l 0X4ffffffe -s exit_number
 
-
+I'm doing all assignments by myself.
 
