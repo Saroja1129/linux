@@ -19,24 +19,33 @@
     - ```sudo apt install bison```
     - ```sudo apt install libssl-dev``` 
 12. Now in order to run some make commands, we need to create a .config file having contents of the specific kernel version config file. In my case I had config-5.13.0-39-generic
-13. Run ``` cp /boot/config-5.13.0-39-generic .config ``` inside linux directory
-14. Now go to .config file and comment out CONFIG_SYSTEM_TRUSTED_KEYS and CONFIG_SYSTEM_TRUSTED_KEYRING and change the value of CONFIG_SYSTEM_REVOCATION_KEYS to "" 
-15. Run ''' make oldconfig```. Just press enter to input default values in a series of questions asked
-16. In previous step the version that we are currently running is different from the one checked out and so the the oldconfig make command will ask for only the new things that are no in the previous version
-17. Run ```make prepare```
-18. Run ```make -j x modules``` where x is number of cpu's that you have ( 4 in my case)
-19. Run ``` make -j 8```. This builds the real kernel
-20. Run ``` sudo make INSTALL_MOD_STRIP=1 mdoules_install ```. This will strip away the debussing informaiton that is not needed to recude the computational load while installing the kernel
-21. Run ```sudo make install```
-22. Now go to cmp283-1.c file and add MODULE_LICENSE("GPL V2"); to get ride of the licensing error
-23. Finally, run ```sudo reboot``` to let the OS selest the most recent version of kernel module which is 5.18 in my case and earlier it was 5.13.0-39-generic
-24. Now run ```make``` to get the .ko kernel object
-25. To load this file run ``` sudo insmod cmpe 283-1.ko```
-26. The earlier step won't give any output in console. To view the output run ```dmesg```
-27. The console will have lot of lines displayed from which Pinbased Controls MSR value is the answer of the assignment. If at all it shows 9, it implies that the nested virtualization hasn't been enabled and you may have to start fresh.
-28. To remove the kernel object simple run ``` sudo rmmod cmpe283-1.ko```
-29. If you want to make any changes to the kernel module, you can simply remove it, make the changes, make the module and simply re-install it instead of rebooting the system.
-30. This marks the completion of assignment, rest other part was to commit the Makefile and cmpe283-1.c to git.
+
+13. ![Alt Text](https://github.com/rushil1999/linux/blob/master/img1.jpeg)
+
+14. Run ``` cp /boot/config-5.13.0-39-generic .config ``` inside linux directory
+15. Now go to .config file and comment out CONFIG_SYSTEM_TRUSTED_KEYS and CONFIG_SYSTEM_TRUSTED_KEYRING and change the value of CONFIG_SYSTEM_REVOCATION_KEYS to "" 
+16. Run ''' make oldconfig```. Just press enter to input default values in a series of questions asked
+17. In previous step the version that we are currently running is different from the one checked out and so the the oldconfig make command will ask for only the new things that are no in the previous version
+18. Run ```make prepare```
+19. Run ```make -j x modules``` where x is number of cpu's that you have ( 4 in my case)
+20. Run ``` make -j 4```. This builds the real kernel
+
+21. ![Alt Text](https://github.com/rushil1999/linux/blob/master/img7.jpeg)
+22. Run ``` sudo make INSTALL_MOD_STRIP=1 mdoules_install ```. This will strip away the debussing informaiton that is not needed to recude the computational load while installing the kernel
+23. Run ```sudo make install```
+24. Now go to cmp283-1.c file and add MODULE_LICENSE("GPL V2"); to get ride of the licensing error
+25. Finally, run ```sudo reboot``` to let the OS selest the most recent version of kernel module which is 5.18 in my case and earlier it was 5.13.0-39-generic
+26. Now run ```make``` to get the .ko kernel object
+
+27. ![Alt Text](https://github.com/rushil1999/linux/blob/master/img2.jpeg)
+27. To load this file run ``` sudo insmod cmpe 283-1.ko```
+28. The earlier step won't give any output in console. To view the output run ```dmesg```
+29. The console will have lot of lines displayed from which Pinbased Controls MSR value is the answer of the assignment. If at all it shows 9, it implies that the nested virtualization hasn't been enabled and you may have to start fresh.
+
+30. ![Alt Text](https://github.com/rushil1999/linux/blob/master/img4.jpeg)
+31. To remove the kernel object simple run ``` sudo rmmod cmpe283-1.ko```
+32. If you want to make any changes to the kernel module, you can simply remove it, make the changes, make the module and simply re-install it instead of rebooting the system.
+33. This marks the completion of assignment, rest other part was to commit the Makefile and cmpe283-1.c to git.
 
 
 # Assignment 2 - Rushil Shah - 015908789
@@ -49,18 +58,21 @@ For this assignment 0x4FFFFFFF and 0x4FFFFFFE ( 1st and 2nd) CPU Leaf nodes are 
 5. Once that is done run ``` sudo make INSTALL_MOD_STRIP=1 modules_install
 6. run ```sudo make install```
 7. Now check if kvm is not loaded in the hypervisor for some reason, to do that run ```lsmod | grep kvm```
-8. If you find kvm and kvm_intell like the image below run ``` sudo rmmod kvm_intel ``` and ``` sudo rmmod kvm``` to remove the modules
+8. If you find kvm and kvm_intel like the image below run ``` sudo rmmod kvm_intel ``` and ``` sudo rmmod kvm``` to remove the modules
 9. Once removed, check again and if there is no output you can again load the updated module.
-10. To load the updated module, run ``` sudo modprobe kvm ``` and ``` sudo modprobe kvm_intel```
-11. Now to verify if our code runs correctly Ubuntu VM instance inside the current VM is needed, which can be done by installing the Virtual Manager
-12. run ``` sudo apt update ```
-13. run ```sudo sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager```
-14. run ```sudo systemctl is-active libvirtd ```. This will check if the daemon is active or not
-15. To start the virtual manager, run ```virt-manager```. This will boot where in you will have to use .iso file to install ubuntu
-16. Post installation, open the terminal and run ```sudo apt-get update``` and install cpuid by ``` sudo apt-get install -y cpuid```
-17. cpuid package is installed to test our implementation in the module, this lets us directly run by giving the input and see the output
-18. Run ``` cpuid(0x4FFFFFFF)``` and ``` cpuid(0x4FFFFFFE) and this will run the functions
-19. Go back the existing VM and run ``` dmesg ``` to get the output
+10. ![Alt Text](https://github.com/rushil1999/linux/blob/master/img6.jpeg)
+
+11. To load the updated module, run ``` sudo modprobe kvm ``` and ``` sudo modprobe kvm_intel```
+12. Now to verify if our code runs correctly Ubuntu VM instance inside the current VM is needed, which can be done by installing the Virtual Manager
+13. run ``` sudo apt update ```
+14. run ```sudo sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager```
+15. run ```sudo systemctl is-active libvirtd ```. This will check if the daemon is active or not
+16. To start the virtual manager, run ```virt-manager```. This will boot where in you will have to use .iso file to install ubuntu
+17. Post installation, open the terminal and run ```sudo apt-get update``` and install cpuid by ``` sudo apt-get install -y cpuid```
+18. cpuid package is installed to test our implementation in the module, this lets us directly run by giving the input and see the output
+19. Run ``` cpuid(0x4FFFFFFF)``` and ``` cpuid(0x4FFFFFFE) and this will run the functions
+20. Go back the existing VM and run ``` dmesg ``` to get the output
 
 PS: During running ```make INSTALL_MOD_STRIP=1 modules_install``` I came across cycle detection error
 
+![Alt Text](https://github.com/rushil1999/linux/blob/master/img5.jpeg)
