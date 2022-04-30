@@ -137,17 +137,10 @@ Steps:
 
 
 ## Questions
-1. For each member in your team, provide 1 paragraph detailing what parts of the lab that member implemented / researched. (You may skip this question if you are doing the lab by yourself). <br/>
-I am doing this myself <br/> <br/>
 
-2. Include a sample of your print of exit count output from dmesg from “with ept” and “without ept”. <br/>
-
-
-3. What did you learn from the count of exits? Was the count what you expected? If not, why not? <br/>
 After Reboot, the number of exits increased. This was something I expected to happen because Shadow Page Architecture wants more exits than Nested Page Architecture.
- <br/> <br/>
 
-4. What changed between the two runs (ept vs no-ept)? <br/>
+
 No-ept generates extra exits for each memory access. Because with Shadow Paging, a more number of exits, controls must be turned on for each memory access to perform properly. VMM, on the other hand, is unconcerned about any of this in Nested since VMM protects the secondary translation of each memory access.  <br/><br/>
 
 
