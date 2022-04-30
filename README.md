@@ -109,14 +109,17 @@ Ans: I noticed that the frequency began to increase. And there was a direct diff
 
 4. Of the exit types defined in the SDM, which are the most frequent? Least? <br/><br/>
 Ans:
+
 List of most frequent exit numbers
+
 Exit Number 12 - HLT
 Exit Number 30 - I/O instrcution
 Exit Number 1 - External Interrupt
 Exit Number 10 - CPUID
 Exit Number 48 -EPT violation
 
-List of least Frequent Exit Numbers,
+List of least Frequent Exit Numbers
+
 Exit Number 0 - Exception
 Exit Number 7 - Interrupt window
 Exit Number 29 - MOV DR
