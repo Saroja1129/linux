@@ -111,18 +111,18 @@ Ans: I noticed that the frequency began to increase. And there was a direct diff
 
 List of most frequent exit numbers
 <br/>
-Exit Number 12 - HLT
-Exit Number 30 - I/O instrcution
-Exit Number 1 - External Interrupt
-Exit Number 10 - CPUID
-Exit Number 48 -EPT violation
+Exit Number 12 - HLT<br/>
+Exit Number 30 - I/O instrcution<br/>
+Exit Number 1 - External Interrupt<br/>
+Exit Number 10 - CPUID<br/>
+Exit Number 48 -EPT violation<br/>
 
 List of least Frequent Exit Numbers
 <br/>
-Exit Number 0 - Exception
-Exit Number 7 - Interrupt window
-Exit Number 29 - MOV DR
-Exit Number 55 - XSETBV 
+Exit Number 0 - Exception<br/>
+Exit Number 7 - Interrupt window<br/>
+Exit Number 29 - MOV DR<br/>
+Exit Number 55 - XSETBV<br/>
 
 # Assignment 4
 
