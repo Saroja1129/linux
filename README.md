@@ -58,7 +58,10 @@ The commands to execute are given below:
 9. modprobe kvm
 10. modprobe kvm_intel
 
-Next we will Create a Inner VM inside a VM using the below commands:
+Next we will install Nested VM.
+
+
+And then inner VM (ubuntuu) was created inside existing VM by installing Virtual manager using below commands:
 1. sudo apt update
 2. sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
 3. sudo systemct1 status libvirtd
@@ -74,4 +77,96 @@ Next we will Create a Inner VM inside a VM using the below commands:
         cpuid -l 0X4ffffffe -s exit_number
 
 I'm doing all assignments by myself.
+
+# Assignment-3 
+Here I worked on two leaf nodes %eax=0x4FFFFFFD and %eax=0x4FFFFFFC.
+For CPUID leaf node %eax=0x4FFFFFFD: <br/>
+ 1.The leaf node should return the number of exits for the exit number given in %ecx. 
+ 2.The output should return %eax.
+ 3. Executed the CPUID package with 0x4FFFFFFD and exit the number in ecx.<br/>
+ 
+ For CPUID leaf node %eax=0x4FFFFFFC:
+ Modified the code in cupid.c and vmx.c
+     1. To get the high 32 bits of the total time spent in the exit in %ebx.
+     2. And the the low 32 bits of the time spent in at exit %ec.
+     3. Executed the CPUID package with 0x4FFFFFF and exit number in ecx.
+     
+The setup for this asssignment is same as the previous one the only change is we have to write code for the above instructions to handle the respective requests.
+We executed the inner commands in the inner VM which is inside another VM
+The commands are:
+cpuid -l 0X4ffffffc -s exit_number
+cpuid -l 0X4ffffffd -s exit_number
+
+--The code is in assignment-3 folder.
+
+<br/>
+## Questions
+3. Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there more exits performed during certain VM operations? Approximately how many exits does a full VM boot entail? 
+I noticed that the frequency began to increase. And there was a direct difference in the increase in frequency of the number of exits before and after booting the nested VM. The full VM boot entailed around ~6900000.
+
+
+I observed that the frequency continued to increase. And I saw a clear difference in increase before and after booting the nested VM. Approximately a full VM boot entail around ≈ 7000000 exits. 
+
+
+4. Of the exit types defined in the SDM, which are the most frequent? Least? <br/><br/>
+
+List of most frequent exit numbers
+
+Exit Number 12 - HLT
+Exit Number 30 - I/O instrcution
+Exit Number 1 - External Interrupt
+Exit Number 10 - CPUID
+Exit Number 48 -EPT violation
+
+List of least Frequent Exit Numbers,
+
+Exit Number 0 - Exception
+Exit Number 7 - Interrupt window
+Exit Number 29 - MOV DR
+Exit Number 55 - XSETBV 
+
+# Assignment 4
+
+Steps:
+- Execute the assignment 3 code and boot a test VM using that code.
+- Once the VM has booted, we will run the cpuid to get the total number of exits count for each type of exit handled by the KVM for both nested and shadow paging for this we will run the sequence of queries of CPUID leaf function 0x4FFFFFFE.
+- Shutdown your test (inner) VM.
+- Remove the ‘kvm-intel’ module from your running kernel
+- Reload the kvm-intel module with the parameter ept=0 
+- The module is present in the path insmod /lib/modules/5.15.0+/kernel/arch/x86/kvm/kvm-intel.ko. 
+-  Boot the VM again, and capture the same output as you did in step 2. <br/> <br/> <br/>
+
+
+## Questions
+1. For each member in your team, provide 1 paragraph detailing what parts of the lab that member implemented / researched. (You may skip this question if you are doing the lab by yourself). <br/>
+I am doing this myself <br/> <br/>
+
+2. Include a sample of your print of exit count output from dmesg from “with ept” and “without ept”. <br/>
+
+With EPT <br/>
+
+![with ept (1)](https://user-images.githubusercontent.com/25710427/145280844-ecb31762-a9f4-4a34-91a6-57ae42359649.png)<br/>
+![with ept (2)](https://user-images.githubusercontent.com/25710427/145280877-c12467bc-d759-40cd-b6ea-00a87e5127bb.png) <br/> <br/>
+
+Without EPT <br/>
+![no ept (1)](https://user-images.githubusercontent.com/25710427/145280915-69a246c5-8b99-46e4-b891-fa0317ae206d.png) <br/>
+![no ept (2)](https://user-images.githubusercontent.com/25710427/145280936-6e1ac391-9a43-4e21-89dc-5beab1a15d2d.png) <br/> <br/>
+
+
+3. What did you learn from the count of exits? Was the count what you expected? If not, why not? <br/>
+After Reboot, the number of exits increased. This was something I expected to happen because Shadow Page Architecture wants more exits than Nested Page Architecture.
+ <br/> <br/>
+
+4. What changed between the two runs (ept vs no-ept)? <br/>
+No-ept generates extra exits for each memory access. Because with Shadow Paging, a more number of exits, controls must be turned on for each memory access to perform properly. VMM, on the other hand, is unconcerned about any of this in Nested since VMM protects the secondary translation of each memory access.  <br/><br/>
+
+
+
+
+
+
+
+
+
+
 
