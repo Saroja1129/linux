@@ -102,20 +102,14 @@ cpuid -l 0X4ffffffd -s exit_number
 
 The code is in assignment-3 folder.
 
-<br/>
 # Questions
 
 3. Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there more exits performed during certain VM operations? Approximately how many exits does a full VM boot entail? 
-I noticed that the frequency began to increase. And there was a direct difference in the increase in frequency of the number of exits before and after booting the nested VM. The full VM boot entailed around ~6900000.
-
-
-I observed that the frequency continued to increase. And I saw a clear difference in increase before and after booting the nested VM. Approximately a full VM boot entail around ≈ 7000000 exits. 
-
+Ans: I noticed that the frequency began to increase. And there was a direct difference in the increase in frequency of the number of exits before and after booting the      nested VM. The full VM boot entailed around ~6900000.
 
 4. Of the exit types defined in the SDM, which are the most frequent? Least? <br/><br/>
-
+Ans:
 List of most frequent exit numbers
-
 Exit Number 12 - HLT
 Exit Number 30 - I/O instrcution
 Exit Number 1 - External Interrupt
@@ -123,7 +117,6 @@ Exit Number 10 - CPUID
 Exit Number 48 -EPT violation
 
 List of least Frequent Exit Numbers,
-
 Exit Number 0 - Exception
 Exit Number 7 - Interrupt window
 Exit Number 29 - MOV DR
