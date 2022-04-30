@@ -80,16 +80,17 @@ I'm doing all assignments by myself.
 
 # Assignment-3 
 Here I worked on two leaf nodes %eax=0x4FFFFFFD and %eax=0x4FFFFFFC.
-For CPUID leaf node %eax=0x4FFFFFFD: <br/>
-1.The leaf node should return the number of exits for the exit number given in %ecx. 
-2.The output should return %eax.
-3. Executed the CPUID package with 0x4FFFFFFD and exit the number in ecx.<br/>
+
+For CPUID leaf node %eax=0x4FFFFFFD:
+-The leaf node should return the number of exits for the exit number given in %ecx. 
+-The output should return %eax.
+-Executed the CPUID package with 0x4FFFFFFD and exit the number in ecx.<br/>
  
  For CPUID leaf node %eax=0x4FFFFFFC:
  Modified the code in cupid.c and vmx.c
- 1. To get the high 32 bits of the total time spent in the exit in %ebx.
- 2. And the the low 32 bits of the time spent in at exit %ec.
- 3. Executed the CPUID package with 0x4FFFFFF and exit number in ecx.
+ - To get the high 32 bits of the total time spent in the exit in %ebx.
+ - And the the low 32 bits of the time spent in at exit %ec.
+ - Executed the CPUID package with 0x4FFFFFF and exit number in ecx.
      
 The setup for this asssignment is same as the previous one the only change is we have to write code for the above instructions to handle the respective requests.
 We executed the inner commands in the inner VM which is inside another VM
@@ -101,6 +102,7 @@ The code is in assignment-3 folder.
 
 <br/>
 # Questions
+
 3. Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there more exits performed during certain VM operations? Approximately how many exits does a full VM boot entail? 
 I noticed that the frequency began to increase. And there was a direct difference in the increase in frequency of the number of exits before and after booting the nested VM. The full VM boot entailed around ~6900000.
 
