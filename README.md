@@ -80,7 +80,6 @@ I'm doing all assignments by myself.
 
 # Assignment-3 
 Here I worked on two leaf nodes %eax=0x4FFFFFFD and %eax=0x4FFFFFFC.
-
 For CPUID leaf node %eax=0x4FFFFFFD:
 -The leaf node should return the number of exits for the exit number given in %ecx. 
 -The output should return %eax.
@@ -93,7 +92,7 @@ For CPUID leaf node %eax=0x4FFFFFFD:
  - Executed the CPUID package with 0x4FFFFFF and exit number in ecx.
      
 The setup for this asssignment is same as the previous one the only change is we have to write code for the above instructions to handle the respective requests.
-We executed the inner commands in the inner VM which is inside another VM
+We executed the inner commands in the inner VM which is inside another VM<br/>
 The commands are:
 cpuid -l 0X4ffffffc -s exit_number
 cpuid -l 0X4ffffffd -s exit_number
