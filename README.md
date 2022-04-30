@@ -48,9 +48,8 @@
 33. This marks the completion of assignment, rest other part was to commit the Makefile and cmpe283-1.c to git.
 
 
-# Assignment 2 - Rushil Shah - 015908789
+# Assignment 2 & 3 - Rushil Shah - 015908789
 
-For this assignment 0x4FFFFFFF and 0x4FFFFFFE ( 1st and 2nd) CPU Leaf nodes are implemented
 1. Go to forked linux directory from the previous assignment
 2. run ```cd linux/arch/x86/kvm``` 
 3. Include the code for the implementation in cpuid.c and vmx/vmx.c.
@@ -70,9 +69,25 @@ For this assignment 0x4FFFFFFF and 0x4FFFFFFE ( 1st and 2nd) CPU Leaf nodes are 
 16. To start the virtual manager, run ```virt-manager```. This will boot where in you will have to use .iso file to install ubuntu
 17. Post installation, open the terminal and run ```sudo apt-get update``` and install cpuid by ``` sudo apt-get install -y cpuid```
 18. cpuid package is installed to test our implementation in the module, this lets us directly run by giving the input and see the output
-19. Run ``` cpuid(0x4FFFFFFF)``` and ``` cpuid(0x4FFFFFFE)``` and this will run the functions
+19. Run commands``` cpuid(0x4FFFFFFF)```,``` cpuid(0x4FFFFFFE)```,``` cpuid(0x4FFFFFFD)``` and ``` cpuid(0x4FFFFFFC)``` to run the functions
 20. Go back the existing VM and run ``` dmesg ``` to get the output.
 
 PS: During running ```make INSTALL_MOD_STRIP=1 modules_install``` I came across cycle detection error
 
 ![Alt Text](https://github.com/rushil1999/linux/blob/master/img5.jpeg)
+
+
+# Assignment 4 - Rushil Shah - 015908789
+
+Steps
+1. Conitnue with Assignment 3 environment
+2. Run ```cpuid(0xFFFFFFE) -s 31``` in the inner VM and record the exit count information
+3. Shutdown inner VM, using the normal OS shutdown
+4. In the outer VM, remove the kvm-intel module, by running the command ``` sudo rmmod kvm_intel ```
+5. Reload the module, with ept = 0 parameter, by running ```sudo insmod kvm-intel.ko ept=0``` to disable nested pagindg and force shadow paging
+6. Boot the inner VM again
+7. Repeat step 2 and record the output
+
+Q3. Shadow paging has a higher exit count than nested paging because the VMM has to do more work in shadow paging.
+
+Q4. When shadow paging is enabled (ept=0), the VM conducts more TLB flushes, page faults, and other operations, resulting in more exits than when ept=1.
