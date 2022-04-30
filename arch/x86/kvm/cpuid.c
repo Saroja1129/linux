@@ -1458,7 +1458,7 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 		eax = total_exit_count; //storing total_exits to eax
 		printk(KERN_INFO "For Input 0x4FFFFFFF, total exits are %u", total_exit_counts);
 	}
-	else if(eax == 0x4FFFFFFD){
+	else if(eax == 0x4FFFFFFD){ //Assignment 3:2
 		if(ecx == 3 || ecx == 4 || ecx == 6 || ecx == 11 || ecx == 16 || ecx == 17 || ecx == 51 || ecx == 63 || ecx == 64 || ecx == 66 || ecx == 67 || ecx == 68 || ecx == 69){
 			eax = 0;
 			ebx = 0;
@@ -1482,7 +1482,29 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 				printk(KERN_INFO "Time spent for exit type %u is %llu cycles", i, vmm_time_elapsed_for_exit_type[index]);
 			}
 
-	}	
+	}
+	else if(eax==0x4ffffffc){ //Assignment 3:1
+                printk(KERN_INFO "Exit Number In ECX = %d",(int)ecx);
+                if(ecx >= 0 && ecx <= 69){
+                        if(ecx == 35 || ecx == 38 || ecx == 42 || ecx == 65){
+                                eax = 0; 
+                                ebx = 0; 
+                                ecx = 0; 
+                                edx = 0xFFFFFFFF;
+                        }else{
+                                
+                                ebx = ((tpe[(int)ecx]) >> 32);
+                       
+                                ecx = (tpe[(int)ecx] & 0xFFFFFFFF );
+                                
+                        }
+                }else{
+                        eax = 0; 
+                        ebx = 0; 
+                        ecx = 0; 
+                        edx = 0;
+                }
+        }	
 	else if(eax == 0x4FFFFFFE){ //Assignment 2:2
 		ebx = (unsigned long) time_elapsed >> 32;//storing the higher 32 bits
 		ecx = (unsigned long) time_elapsed & 0xffffffff;//storing the lower 32 bits	
